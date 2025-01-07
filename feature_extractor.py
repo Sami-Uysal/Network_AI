@@ -9,12 +9,9 @@ def extract_features(packet):
         features['proto'] = packet[IP].proto
         features['length'] = len(packet)
 
-    if TCP in packet:
-        features['src_port'] = packet[TCP].sport
-        features['dst_port'] = packet[TCP].dport
-
-    if UDP in packet:
-        features['src_port'] = packet[UDP].sport
-        features['dst_port'] = packet[UDP].dport
+    if TCP in packet or UDP in packet:
+        transport_layer = TCP if TCP in packet else UDP
+        features['src_port'] = packet[transport_layer].sport
+        features['dst_port'] = packet[transport_layer].dport
 
     return features
