@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import joblib
 
 def load_data(file):
@@ -11,7 +10,7 @@ def load_data(file):
 
     data['proto'] = data['proto'].astype('category').cat.codes
 
-    X = data[['dur', 'proto']]
+    X = data[['dur', 'proto', 'sbytes', 'dbytes']]
     y = data['label']
     return X, y
 
@@ -26,5 +25,6 @@ clf = RandomForestClassifier()
 clf.fit(X_train, y_train)
 
 
-joblib.dump(clf, "trained_model.pkl")
+feature_names = ["dur", "proto", "sbytes", "dbytes"]
+joblib.dump((clf, feature_names), "trained_model.pkl")
 
